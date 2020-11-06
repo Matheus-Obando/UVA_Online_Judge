@@ -1,13 +1,8 @@
-//TODO: Format the input 
 #include <iostream>
 #include <utility>
 #include <vector>
 #include <sstream>
 #include <ostream> 
-
-/* Use for input format (boost library required) */
-//#include "CPP_Exercises/boost_library/boost/algorithm/string.hpp"
-//#include "CPP_Exercises/boost_library/boost/algorithm/string/split.hpp"
 
 using namespace std;
 
@@ -18,31 +13,60 @@ void CicleLenghtAlgorithm(int A, int B)
     int current = 0;
     int maximum = 0;
 
-    for (int i = A; i <= B; i++)
+    if (A <= B)
     {
-        current = i;
-        total = 0;
-        while(current != 1)
+        for (int i = A; i <= B; i++)
         {
-            if (current%2 != 0)
+            current = i;
+            total = 0;
+            while(current != 1)
             {
-                current = current*3 + 1;
-                total++;
+                if (current%2 != 0)
+                {
+                    current = current*3 + 1;
+                    total++;
+                }
+                else
+                {
+                    current = current/2;
+                    total++;
+                }
             }
-            else
+            total++;
+            if (total > maximum)
             {
-                current = current/2;
-                total++;
+                maximum = total; 
             }
-        }
-
-        total++;
-        if (total > maximum)
-        {
-            maximum = total; 
         }
     }
 
+    else
+    {
+        for (int i = B; i <= A; i++)
+        {
+            current = i;
+            total = 0;
+            while(current != 1)
+            {
+                if (current%2 != 0)
+                {
+                    current = current*3 + 1;
+                    total++;
+                }
+                else
+                {
+                    current = current/2;
+                    total++;
+                }
+            }
+            total++;
+            if (total > maximum)
+            {
+                maximum = total; 
+            }
+        }
+    }
+    
     cout << maximum;
 }
 
@@ -50,51 +74,59 @@ int main(int argc, char *argv[])
 {
 
     pair <int, int> values;
+    vector<string> inputLines;
     bool condition;
 
 #pragma region Input_Section
 
     do{
 
-        cout << "Input first value: ";
-        cin >> values.first;
-        cout << "Input second value: ";
-        cin >> values.second;
-
+    
     #pragma region Formated_Input
-        /*
+        
         string input;
 
-        cout << "Input values: ";
-        cin >> input;
+        getline(cin, input);
 
+        if (input.empty())
+        {
+            break;
+        }
+
+        cin.clear();
+
+        // Format input
         stringstream ss(input);
-        char temp;
-        ss >> values.first >> temp >> values.second;
 
-        cout << values.first << " " << values.second << endl;
+        ss >> values.first >> values.second;
+        
+    ////////
 
-        */
-    #pragma endregion Formated_Input
+#pragma endregion Formated_Input
 
-        condition = (values.first > 0 && values.first < 10000) &&
-                    (values.second > 0 && values.second < 10000);
+        condition = (values.first > 0 && values.first < 1000000) && (values.second > 0 && values.second < 1000000);
 
         if (condition == true)
         {
-            cout << "Output value: " << values.first << " " << values.second << endl;
+            inputLines.push_back(input);
         }
         else
         {
-            cout << "Error! Invalid Value" << endl;
+            break;
         }
         
-    } while (condition == false);
+    } while (condition != false);
 
 #pragma endregion Input_Section
 
-    CicleLenghtAlgorithm(values.first, values.second);
-    cout << endl;
+    while(!inputLines.empty())
+    {
+        stringstream ss(inputLines.front()); inputLines.erase(inputLines.begin());
 
+        ss >> values.first >> values.second;
+        
+        CicleLenghtAlgorithm(values.first, values.second);
+        cout << endl;
+    }
     return 0;
 }
